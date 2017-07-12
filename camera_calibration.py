@@ -58,9 +58,6 @@ def calibrate_camera( show_corner_images = False ):
     ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(obj_points, img_points, gray.shape[::-1], None, None)
 
     print("done!\nCamera calibration successfull.")
-    print("Camera matrix:\n", mtx)
-    print("Distortion coefficients:\n", dist)
-
     return mtx, dist
 
 
