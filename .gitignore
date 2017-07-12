@@ -9,3 +9,4 @@ output_images/save_output_here.txt
 project_video.mp4
 
 .idea/
+__pycache__/
