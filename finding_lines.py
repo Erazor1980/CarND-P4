@@ -50,8 +50,8 @@ def find_lines( binary_warped, left_line = Line(), right_line = Line(), plot_res
     # Create an output image to draw on and  visualize the result
     out_img = np.dstack((binary_warped, binary_warped, binary_warped))*255
 
-    cv2.imshow('test', out_img)
-    cv2.waitKey(0)
+    #cv2.imshow('test', out_img)
+    #cv2.waitKey(0)
 
     # Find the peak of the left and right halves of the histogram
     # These will be the starting point for the left and right lines
