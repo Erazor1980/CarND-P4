@@ -24,11 +24,15 @@ def pipeline(img, s_thresh=(170, 255), sx_thresh=(20, 100)):
     # Note color_binary[:, :, 0] is all 0s, effectively an all black image. It might
     # be beneficial to replace this channel with something else.
     color_binary = np.dstack((np.zeros_like(sxbinary), sxbinary, s_binary))
-    return color_binary
+
+    combined_binary = np.zeros_like(sxbinary)
+    combined_binary[(s_binary == 1) | (sxbinary == 1)] = 1
+    return color_binary, combined_binary
 
 
 if __name__ == "__main__":
     img = cv2.imread( "./test_images/test1.jpg")
-    res = pipeline(img)
-    cv2.imshow('test', res)
+    resColor, resCombined = pipeline(img)
+    cv2.imshow('resColor', resColor)
+    cv2.imshow('resCombined', resCombined * 255)
     cv2.waitKey(0)
