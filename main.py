@@ -9,6 +9,7 @@ use_precalculated_calib = True  # not wasting time each run with the same calibr
 test_camera_calib = False       # undistort and display a test image
 display_top_view = False        # show warped (top view) image (more for debugging)
 
+test_on_single_image = True     # else the whole video will be processed
 
 ############################
 #### CAMERA CALIBRATION ####
@@ -34,8 +35,6 @@ def process_frame(img, display_result = False):
     ############################
     #### CORRECT DISTORTION ####
     ############################
-    #img = cv2.imread('./test_images/test6.jpg')
-    #img = cv2.imread('./test_images/straight_lines1.jpg')
     undist = cv2.undistort(img, mtx, dist, None, mtx)
 
     ################################
@@ -43,10 +42,6 @@ def process_frame(img, display_result = False):
     ################################
     import pipeline as pl
     color_binary, combined_binary = pl.pipeline( undist )
-
-    #cv2.imshow('test', undist)
-    #cv2.imshow('th', color_binary)
-    #cv2.waitKey(0)
 
     ########################
     #### TOP VIEW IMAGE ####
@@ -61,10 +56,10 @@ def process_frame(img, display_result = False):
     #print("src",src)
 
     dst = np.float32(
-        [[(img_size[0] / 3), 0],
-        [(img_size[0] / 3), img_size[1]],
-        [(img_size[0] * 2 / 3), img_size[1]],
-        [(img_size[0] * 2 / 3), 0]])
+        [[(img_size[0] / 5), 0],
+        [(img_size[0] / 5), img_size[1]],
+        [(img_size[0] * 4 / 5), img_size[1]],
+        [(img_size[0] * 4 / 5), 0]])
     #print("dst",dst)
 
     # Given src and dst points, calculate the perspective transform matrix
@@ -89,7 +84,7 @@ def process_frame(img, display_result = False):
     l_line = fl.Line()  # left line
     r_line = fl.Line()  # right line
     #fl.find_lines( np.uint8(top_view_img), l_line, r_line, True )
-    fl.find_lines( top_view_img, l_line, r_line, False )
+    fl.find_lines( top_view_img, l_line, r_line, True )
 
     ##########################
     #### DRAW FINAL IMAGE ####
@@ -120,15 +115,18 @@ def process_frame(img, display_result = False):
     return result
 
 
+if test_on_single_image == True:
+    img = cv2.imread('./test_images/test6.jpg')
+    process_frame(img, True)
+else:
+    #######################################
+    #### LOADING AND PROCESSING VIDEO  ####
+    #######################################
+    import imageio
+    imageio.plugins.ffmpeg.download()
+    from moviepy.editor import VideoFileClip
 
-#######################################
-#### LOADING AND PROCESSING VIDEO  ####
-#######################################
-import imageio
-imageio.plugins.ffmpeg.download()
-from moviepy.editor import VideoFileClip
-
-result_path = 'output/result_video.mp4'
-video = VideoFileClip("project_video.mp4")
-result_video = video.fl_image(process_frame) #NOTE: this function expects color images!!
-result_video.write_videofile(result_path, audio=False)
+    result_path = 'output/result_video.mp4'
+    video = VideoFileClip("project_video.mp4")
+    result_video = video.fl_image(process_frame) #NOTE: this function expects color images!!
+    result_video.write_videofile(result_path, audio=False)
