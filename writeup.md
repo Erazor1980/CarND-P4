@@ -52,7 +52,7 @@ I used a combination of color and gradient thresholds to generate a binary image
 
 ![alt text][image3]
 
-The code for my perspective transform can be found below the "TOP VIEW IMAGE" comment (lines 50ff). I choose the hardcoded the source and destination points in the following manner:
+The code for my perspective transform can be found below the "TOP VIEW IMAGE" comment (lines 50ff in `main.py`). I choose to hardcode the source and destination points in the following manner:
 
 ```python
 img_size = (undist.shape[1], undist.shape[0])
@@ -81,7 +81,7 @@ I verified that my perspective transform was working as expected by drawing the 
 
 ![alt text][image4]
 
-You can test it in code setting the "display_top_view" to "True". I have implemented a draw_polygon function (in helper.py), which I used to draw the points/lines.
+You can test it in code setting the "display_top_view" to "True". I have implemented a draw_polygon function (in `helper.py`), which I used to draw the points/lines.
 
 Then I implemented find_lines function (see finding_lines.py), which performs following steps to find lanes in the image:
 * calculate a column wise histogram for the bottom half of the binary threshold image to find 2 peaks (= starting points of the lines)
@@ -93,7 +93,7 @@ Then I implemented find_lines function (see finding_lines.py), which performs fo
 
 As in the most of my python scripts, which are used in the main.py, there is a __main__ in which can be used to see some test output.
 
-In the curvature.py I implemented the function "calc_curvature", which additionally calculates the distance of the car to the center between the lines. Both values are returned by this function. 
+In the `curvature.py` I implemented the function "calc_curvature", which additionally calculates the distance of the car to the center between the lines. Both values are returned by this function. 
 
 First I approximately calculate the meters per pixel in both directions. Then I fin new polynomials through the points in world space. Next two curves (for left and right line) are calculated as described in the udacity lesson. The mean value of both is the output value.
 For the distance to the center I calculate the difference between the center between the two lines (bottom part) and the image center. And then multiply this value by xm_per_pix.
