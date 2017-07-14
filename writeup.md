@@ -112,6 +112,7 @@ Here's a [link to my video result](./output/result_video.mp4)
 
 ### Discussion
 
-#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+Right now there is now "temporal" tracking of the lines implemented, or any kind of filtering. The lines are detected frame-wise. This could cause problems, when e.g. some other peaks appear in the image (dirty road, other car, etc.). 
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+A very nice improvement would be to track the history of the line, and smooth the results. Search only near the last stable lines found etc.
+
