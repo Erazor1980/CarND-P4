@@ -52,7 +52,7 @@ I used a combination of color and gradient thresholds to generate a binary image
 
 ![alt text][image3]
 
-The code for my perspective can be found below the "TOP VIEW IMAGE" comment (lines 50ff). I chose the hardcode the source and destination points in the following manner:
+The code for my perspective transform can be found below the "TOP VIEW IMAGE" comment (lines 50ff). I choose the hardcoded the source and destination points in the following manner:
 
 ```python
 img_size = (undist.shape[1], undist.shape[0])
