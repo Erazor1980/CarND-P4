@@ -91,7 +91,7 @@ Then I implemented find_lines function (see finding_lines.py), which performs fo
 
 ![alt text][image5]
 
-As in the most of my python scripts, which are used in the main.py, there is a __main__ in which can be used to see some test output.
+As in the most of my python scripts, which are used in the `main.py`, there is a `__main__` which can be used to see some test output.
 
 In the `curvature.py` I implemented the function "calc_curvature", which additionally calculates the distance of the car to the center between the lines. Both values are returned by this function. 
 
