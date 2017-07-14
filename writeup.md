@@ -21,6 +21,8 @@ The goals / steps of this project are the following:
 [image2]: ./examples/undistImg.png "Undistorted Image"
 [image3]: ./examples/binaryImg.png "Binary Image"
 [image4]: ./examples/topView.png "Top View Image"
+[image5]: ./examples/findingLines.png "Finding Lines"
+[image6]: ./examples/backPlot.png "Green Area Between Lines"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
@@ -81,19 +83,22 @@ I verified that my perspective transform was working as expected by drawing the 
 
 You can test it in code setting the "display_top_view" to "True". I have implemented a draw_polygon function (in helper.py), which I used to draw the points/lines.
 
-#### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
-
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+Then I implemented find_lines function (see finding_lines.py), which performs following steps to find lanes in the image:
+* calculate a column wise histogram for the bottom half of the binary threshold image to find 2 peaks (= starting points of the lines)
+* use sliding window approach (15 rectangles per line) to find next line parts upwards 
+* collect points within these windows (for left and right line)
+* fit lane lines with a 2nd order polynomial kinda like this
 
 ![alt text][image5]
 
-#### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+As in the most of my python scripts, which are used in the main.py, there is a __main__ in which can be used to see some test output.
 
-I did this in lines # through # in my code in `my_other_file.py`
+In the curvature.py I implemented the function "calc_curvature", which additionally calculates the distance of the car to the center between the lines. Both values are returned by this function. 
 
-#### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+First I approximately calculate the meters per pixel in both directions. Then I fin new polynomials through the points in world space. Next two curves (for left and right line) are calculated as described in the udacity lesson. The mean value of both is the output value.
+For the distance to the center I calculate the difference between the center between the two lines (bottom part) and the image center. And then multiply this value by xm_per_pix.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+Both values (curvature and distance to center in meter) are displayed to the result image. Below the comment "DRAW FINAL IMAGE" you can find the implementation of the final drawing, the green polygon between the 2 detected lines. Here is an example of my result on a test image:
 
 ![alt text][image6]
 
@@ -101,9 +106,7 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 
 ### Pipeline (video)
 
-#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
-
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./output/result_video.mp4)
 
 ---
 
