@@ -9,7 +9,7 @@ use_precalculated_calib = True  # not wasting time each run with the same calibr
 test_camera_calib = False       # undistort and display a test image
 display_top_view = False        # show warped (top view) image (more for debugging)
 
-test_on_single_image = True     # else the whole video will be processed
+test_on_single_image = False     # else the whole video will be processed
 
 ############################
 #### CAMERA CALIBRATION ####
@@ -84,7 +84,14 @@ def process_frame(img, display_result = False):
     l_line = fl.Line()  # left line
     r_line = fl.Line()  # right line
     #fl.find_lines( np.uint8(top_view_img), l_line, r_line, True )
-    fl.find_lines( top_view_img, l_line, r_line, True )
+    fl.find_lines( top_view_img, l_line, r_line, False )
+
+    ##########################################
+    #### CURVATURE AND DISTANCE TO CENTER ####
+    ##########################################
+    import curvature as curv
+    meanCurve, distToCenter = curv.calc_curvature( l_line.current_fit_x, r_line.current_fit_x, l_line.current_fit_y )
+
 
     ##########################
     #### DRAW FINAL IMAGE ####
@@ -108,6 +115,11 @@ def process_frame(img, display_result = False):
 
     # Combine the result with the original image
     result = cv2.addWeighted(img, 1, np.uint8(newwarp), 0.3, 0)
+
+    curveTxt = "Curvature: {:f}".format(meanCurve)
+    distTxt = "Dist. to center: {:f}".format(distToCenter)
+    cv2.putText(result, curveTxt, (30, 30), cv2.FONT_HERSHEY_PLAIN, 2, (255,255,255), 2)
+    cv2.putText(result, distTxt, (30, 60), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
 
     if display_result == True:
         cv2.imshow('test', result)
